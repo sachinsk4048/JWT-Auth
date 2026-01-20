@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 exports.authMiddleware = async (req, res, next) => {
     try {
+        
         const token = req.cookies.token || req.headers["authorization"]?.split(" ")[1];
         if (!token) {
             return res.status(401).send({ message: 'unauthorize !token' });
@@ -22,3 +23,15 @@ exports.authMiddleware = async (req, res, next) => {
         return res.status(401).send({ message: 'unauthorize  tryyyyy' });
     }
 }
+
+
+
+exports.accessRole = (allowedRoles) => {
+  return (req, res, next) => {
+    const userRole = req.user.role;
+    if (!allowedRoles.includes(userRole)) {
+      return res.status(403).send({ message: "Forbidden: Access denied" });
+    }
+    next();
+  };
+};
