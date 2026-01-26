@@ -14,6 +14,20 @@ exports.getViewProfile = (req, res) => {
     const { name, email, role, avatar } = req.user;
     return res.status(200).send({ name, email, role, avatar });
 }
+exports.postEditProfile =async (req,res)=>{
+    try{
+        const {name,phone,boi} = req.body;
+        await User.findByIdAndUpdate(req.user._id,{
+            name,
+            phone,
+            boi
+        });
+        return res.status(200).json({message : "profile edit sucessfully"});
+    }catch(error){
+        return res.status(500).json({message : error.message});
+    }
+
+}
 
 exports.postUploadAvatar = async (req, res) => {
     try {

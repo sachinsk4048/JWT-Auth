@@ -7,6 +7,15 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    phone: {
+        type: String,
+        default: null
+    },
+
+    bio: {
+        type: String,
+        default: null
+    },
     email: {
         type: String,
         required: true,
@@ -21,11 +30,11 @@ const userSchema = mongoose.Schema({
         enum: ['user', 'admin'],
         default: 'user',
     },
-    avatar : {
-        type : String,
-        default : null,
+    avatar: {
+        type: String,
+        default: null,
     },
-    
+
     //  Email verification fields
     isVerified: {
         type: Boolean,
@@ -39,11 +48,11 @@ const userSchema = mongoose.Schema({
     },
 
     // reset password
-    resetPasswordToken :{
-        type : String
+    resetPasswordToken: {
+        type: String
     },
-    resetPasswordTokenExpire : {
-        type : Date
+    resetPasswordTokenExpire: {
+        type: Date
     }
 
 

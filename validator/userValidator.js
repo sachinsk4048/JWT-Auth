@@ -1,15 +1,15 @@
 const joi = require('joi');
 
 exports.signupSchema = joi.object({
-    name:joi.string().min(3).max(30).required(),
-    email:joi.string().email().required(),
-    password:joi.string().min(4).required(),
-    role:joi.string().required()
+  name: joi.string().min(3).max(30).required(),
+  email: joi.string().email().required(),
+  password: joi.string().min(4).required(),
+  role: joi.string().required()
 })
 
 exports.loginSchema = joi.object({
-    email:joi.string().email().required(),
-    password:joi.string().min(4).required()
+  email: joi.string().email().required(),
+  password: joi.string().min(4).required()
 })
 
 
@@ -28,3 +28,9 @@ exports.resetPasswordSchema = joi.object({
       "any.only": "Confirm password does not match"
     })
 });
+
+exports.editProfileSchema = joi.object({
+  name: joi.string().min(3).max(30).optional(),
+  phone: joi.string().pattern(/^[0-9]{10}$/).optional(),
+  bio: joi.string().max(200).optional()
+})
