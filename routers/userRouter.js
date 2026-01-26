@@ -7,7 +7,7 @@ const userController = require('../controllers/userController');
 
 const { authMiddleware, accessRole } = require('../middlewares/authMiddleware');
 const validate= require('../middlewares/validateMiddleware');
-const { signupSchema, loginSchema,resetPasswordSchema, editProfileSchema } = require('../validator/userValidator');
+const { signupSchema, loginSchema,resetPasswordSchema, editProfileSchema, createPostSchema } = require('../validator/userValidator');
 const refreshController = require('../controllers/refreshController');
 const upload = require('../middlewares/multer');
 
@@ -16,7 +16,7 @@ const upload = require('../middlewares/multer');
 userRouter.post('/signup',validate(signupSchema),authController.postSignup);
 userRouter.get('/verify/:token',authController.verifyEmail);
 userRouter.post('/forgetPassword',authController.postForgetPassword);
-userRouter.post('/resetPassword/:token',validate(resetPasswordSchema),authController.postResetPassword)
+userRouter.post('/resetPassword/:token',validate(resetPasswordSchema),authController.postResetPassword);
 userRouter.post('/login',validate(loginSchema),authController.postLogin);
 userRouter.post('/logout',authController.getLogout);
 
@@ -24,6 +24,10 @@ userRouter.get('/',userController.getIndex);
 userRouter.post('/user/editProfile',authMiddleware,validate(editProfileSchema),userController.postEditProfile);
 userRouter.post('/user/updateAvatar',authMiddleware,upload.single('avatar'),userController.postUploadAvatar)
 userRouter.get('/profile',authMiddleware,userController.getViewProfile);
+
+userRouter.post('/user/createPost',authMiddleware,validate(createPostSchema),userController.postCreatePost)
+
+
 userRouter.get('/admin',authMiddleware,accessRole(['admin']),userController.getViewProfile);
 
 

@@ -34,3 +34,9 @@ exports.editProfileSchema = joi.object({
   phone: joi.string().pattern(/^[0-9]{10}$/).optional(),
   bio: joi.string().max(200).optional()
 })
+
+exports.createPostSchema = joi.object({
+  postTitle: joi.string().min(3).max(30).required(),
+  postDescription: joi.string().min(3).max(50).optional(),
+  postContent: joi.string().min(3).required()
+})
