@@ -3,6 +3,7 @@ const Post = require('../models/postModel');
 const Like = require('../models/likeModel');
 const Comment = require('../models/commentModel')
 const multer = require('multer');
+const { json } = require('express');
 
 exports.getIndex = async (req, res) => {         //it display all the posts on index page
     try {
@@ -98,27 +99,37 @@ exports.postComment = async (req, res) => {
 }
 
 exports.postUncomment = async (req, res) => {
-      try {
-    const postId = req.params.id;
-    const userId = req.user._id;
+    try {
+        const postId = req.params.id;
+        const userId = req.user._id;
 
-    // Check if comment exists
-    const existingComment = await Comment.findOne({ userId, postId });
-    if (!existingComment) {
-      return res.status(400).json({ message: "You haven't commented on this post" });
+        // Check if comment exists
+        const existingComment = await Comment.findOne({ userId, postId });
+        if (!existingComment) {
+            return res.status(400).json({ message: "You haven't commented on this post" });
+        }
+
+        // Delete comment
+        await Comment.deleteOne({ userId, postId });
+
+        return res.status(200).json({ message: "Comment removed successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-
-    // Delete comment
-    await Comment.deleteOne({ userId, postId });
-
-    return res.status(200).json({ message: "Comment removed successfully" });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
 }
 
-exports.getComments = async(req,res)=>{
-    const postId = 
+exports.getComments = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const comments = await Comment.find(postId);
+        if (!comments) {
+            return res.status(400).json({ message: "no commments yet" });
+        }
+        return res.status(200).json(comments);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+
 }
 
 exports.getViewProfile = (req, res) => {

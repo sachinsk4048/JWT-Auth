@@ -24,6 +24,7 @@ userRouter.post('/post/:id/like',authMiddleware,userController.postLikePost);
 userRouter.post('/post/:id/unlike',authMiddleware,userController.postUnlikePost);
 userRouter.post('/post/:id/comment',authMiddleware,validate(commentSchema),userController.postComment);
 userRouter.post('/post/:id/uncomment',authMiddleware,userController.postUncomment);
+userRouter.get('/post/:id/comments',userController.getComments)
 
 userRouter.post('/user/editProfile',authMiddleware,validate(editProfileSchema),userController.postEditProfile);
 userRouter.post('/user/updateAvatar',authMiddleware,upload.single('avatar'),userController.postUploadAvatar)
