@@ -81,7 +81,7 @@ exports.postComment = async (req, res) => {
         const postId = req.params.id;
         const userId = req.user._id;
         const { comment } = req.body;
-
+        
         const post = await Post.findById(postId);
         if (!post) {
             return res.status(404).json({ message: "post not found" });
@@ -119,18 +119,31 @@ exports.postUncomment = async (req, res) => {
 }
 
 exports.getComments = async (req, res) => {
-    try {
-        const postId = req.params.id;
-        const comments = await Comment.find(postId);
-        if (!comments) {
-            return res.status(400).json({ message: "no commments yet" });
-        }
-        return res.status(200).json(comments);
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
+  try {
+    const postId = req.params.id;
+
+    const comments = await Comment.find({ postId })
+      .populate("userId", "name email") // optional but good
+      .sort({ createdAt: -1 });
+
+    if (comments.length === 0) {
+      return res.status(200).json({
+        count: 0,
+        comments: [],
+        message: "No comments yet"
+      });
     }
 
-}
+    return res.status(200).json({
+      count: comments.length,
+      comments
+    });
+
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 
 exports.getViewProfile = (req, res) => {
     const { name, email, role, avatar } = req.user;
